@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+  # Database
+  mysql:
+    image: mysql:8.2
+    container_name: go-accounts-mysql
+    volumes:
+      - go-accounts-mysql-data:/var/lib/mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+  # phpmyadmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: go-accounts-phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    env_file:
+      - .env
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    depends_on:
+      - mysql
+
+  adminer:
+    image: adminer
+    container_name: go-accounts-adminer
+    restart: always
+    ports:
+      - 8081:8080
+    env_file:
+      - .env
+    environment:
+      ADMINER_DEFAULT_SERVER: mysql
+    depends_on:
+      - mysql
+
+volumes:
+  go-accounts-mysql-data:
+    driver: local
+
+networks:
+  go-accounts-network:
+    driver: bridge
+    external: true
+    name: go-accounts-network
