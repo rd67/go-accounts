@@ -11,28 +11,40 @@ import (
 )
 
 const createEntry = `-- name: CreateEntry :execresult
-INSERT INTO entries (account_id, amount, currency, exchange_rate) VALUES ($1, $2, $3, $4)
+INSERT INTO entries (account_id, amount, currency, exchange_rate) VALUES (?, ?, ?, ?)
 `
 
-func (q *Queries) CreateEntry(ctx context.Context) (sql.Result, error) {
-	return q.db.ExecContext(ctx, createEntry)
+type CreateEntryParams struct {
+	AccountID    uint64  `json:"account_id"`
+	Amount       float64 `json:"amount"`
+	Currency     string  `json:"currency"`
+	ExchangeRate float64 `json:"exchange_rate"`
+}
+
+func (q *Queries) CreateEntry(ctx context.Context, arg CreateEntryParams) (sql.Result, error) {
+	return q.db.ExecContext(ctx, createEntry,
+		arg.AccountID,
+		arg.Amount,
+		arg.Currency,
+		arg.ExchangeRate,
+	)
 }
 
 const deleteEntry = `-- name: DeleteEntry :exec
-DELETE FROM entries WHERE id = $1
+DELETE FROM entries WHERE id = ?
 `
 
-func (q *Queries) DeleteEntry(ctx context.Context) error {
-	_, err := q.db.ExecContext(ctx, deleteEntry)
+func (q *Queries) DeleteEntry(ctx context.Context, id uint64) error {
+	_, err := q.db.ExecContext(ctx, deleteEntry, id)
 	return err
 }
 
 const getEntry = `-- name: GetEntry :one
-SELECT account_id, amount, currency, exchange_rate, isdeleted, createdat, updatedat, id FROM entries WHERE id = $1 LIMIT 1
+SELECT account_id, amount, currency, exchange_rate, isdeleted, createdat, updatedat, id FROM entries WHERE id = ? LIMIT 1
 `
 
-func (q *Queries) GetEntry(ctx context.Context) (Entry, error) {
-	row := q.db.QueryRowContext(ctx, getEntry)
+func (q *Queries) GetEntry(ctx context.Context, id uint64) (Entry, error) {
+	row := q.db.QueryRowContext(ctx, getEntry, id)
 	var i Entry
 	err := row.Scan(
 		&i.AccountID,
@@ -89,9 +101,23 @@ func (q *Queries) ListEntries(ctx context.Context, arg ListEntriesParams) ([]Ent
 }
 
 const updateEntry = `-- name: UpdateEntry :execresult
-UPDATE entries SET account_id = $2, amount = $3, currency = $4, exchange_rate = $5 WHERE id = $1
+UPDATE entries SET account_id = ?, amount = ?, currency = ?, exchange_rate = ? WHERE id = ?
 `
 
-func (q *Queries) UpdateEntry(ctx context.Context) (sql.Result, error) {
-	return q.db.ExecContext(ctx, updateEntry)
+type UpdateEntryParams struct {
+	AccountID    uint64  `json:"account_id"`
+	Amount       float64 `json:"amount"`
+	Currency     string  `json:"currency"`
+	ExchangeRate float64 `json:"exchange_rate"`
+	ID           uint64  `json:"id"`
+}
+
+func (q *Queries) UpdateEntry(ctx context.Context, arg UpdateEntryParams) (sql.Result, error) {
+	return q.db.ExecContext(ctx, updateEntry,
+		arg.AccountID,
+		arg.Amount,
+		arg.Currency,
+		arg.ExchangeRate,
+		arg.ID,
+	)
 }

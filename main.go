@@ -8,8 +8,8 @@ import (
 )
 
 var (
-	DB_DRIVER            string
-	DB_CONNECTION_STRING string
+	DB_DRIVER            = ""
+	DB_CONNECTION_STRING = ""
 )
 
 func init() {

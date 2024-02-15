@@ -11,28 +11,34 @@ import (
 )
 
 const createAccount = `-- name: CreateAccount :execresult
-INSERT INTO accounts (name, balance, currency) VALUES ($1, $2, $3)
+INSERT INTO accounts (name, balance, currency) VALUES (?, ?, ?)
 `
 
-func (q *Queries) CreateAccount(ctx context.Context) (sql.Result, error) {
-	return q.db.ExecContext(ctx, createAccount)
+type CreateAccountParams struct {
+	Name     string  `json:"name"`
+	Balance  float64 `json:"balance"`
+	Currency string  `json:"currency"`
+}
+
+func (q *Queries) CreateAccount(ctx context.Context, arg CreateAccountParams) (sql.Result, error) {
+	return q.db.ExecContext(ctx, createAccount, arg.Name, arg.Balance, arg.Currency)
 }
 
 const deleteAccount = `-- name: DeleteAccount :exec
-DELETE FROM accounts WHERE id = $1
+DELETE FROM accounts WHERE id = ?
 `
 
-func (q *Queries) DeleteAccount(ctx context.Context) error {
-	_, err := q.db.ExecContext(ctx, deleteAccount)
+func (q *Queries) DeleteAccount(ctx context.Context, id uint64) error {
+	_, err := q.db.ExecContext(ctx, deleteAccount, id)
 	return err
 }
 
 const getAccount = `-- name: GetAccount :one
-SELECT name, balance, currency, isdeleted, createdat, updatedat, id FROM accounts WHERE id = $1 LIMIT 1
+SELECT name, balance, currency, isdeleted, createdat, updatedat, id FROM accounts WHERE id = ? LIMIT 1
 `
 
-func (q *Queries) GetAccount(ctx context.Context) (Account, error) {
-	row := q.db.QueryRowContext(ctx, getAccount)
+func (q *Queries) GetAccount(ctx context.Context, id uint64) (Account, error) {
+	row := q.db.QueryRowContext(ctx, getAccount, id)
 	var i Account
 	err := row.Scan(
 		&i.Name,
@@ -87,17 +93,27 @@ func (q *Queries) ListAccounts(ctx context.Context, arg ListAccountsParams) ([]A
 }
 
 const updateAccountBalance = `-- name: UpdateAccountBalance :execresult
-UPDATE accounts SET balance = balance + $2 WHERE id = $1
+UPDATE accounts SET balance = balance + ? WHERE id = ?
 `
 
-func (q *Queries) UpdateAccountBalance(ctx context.Context) (sql.Result, error) {
-	return q.db.ExecContext(ctx, updateAccountBalance)
+type UpdateAccountBalanceParams struct {
+	Balance float64 `json:"balance"`
+	ID      uint64  `json:"id"`
+}
+
+func (q *Queries) UpdateAccountBalance(ctx context.Context, arg UpdateAccountBalanceParams) (sql.Result, error) {
+	return q.db.ExecContext(ctx, updateAccountBalance, arg.Balance, arg.ID)
 }
 
 const updateAccountDetails = `-- name: UpdateAccountDetails :execresult
-UPDATE accounts SET name = $2 WHERE id = $1
+UPDATE accounts SET name = ? WHERE id = ?
 `
 
-func (q *Queries) UpdateAccountDetails(ctx context.Context) (sql.Result, error) {
-	return q.db.ExecContext(ctx, updateAccountDetails)
+type UpdateAccountDetailsParams struct {
+	Name string `json:"name"`
+	ID   uint64 `json:"id"`
+}
+
+func (q *Queries) UpdateAccountDetails(ctx context.Context, arg UpdateAccountDetailsParams) (sql.Result, error) {
+	return q.db.ExecContext(ctx, updateAccountDetails, arg.Name, arg.ID)
 }
