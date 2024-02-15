@@ -15,7 +15,6 @@ default: help
 help: # Show help for each of the Makefile recipes.
 	@grep -E '^[a-zA-Z0-9 -]+:.*#'  Makefile | sort | while read -r l; do printf "\033[1;32m$$(echo $$l | cut -f 1 -d':')\033[00m:$$(echo $$l | cut -f 2- -d'#')\n"; done
 
-
 .PHONY: docker-compose-build
 docker-compose-build: # Create docker-compose build
 	docker-compose -f docker-compose.yml build $(c)
@@ -40,10 +39,16 @@ docker-compose-destroy: # Destroys docker-compose
 docker-compose-stop: # Temporary stops docker-compose
 	docker-compose -f docker-compose.yml stop $(c)
 
+# .SILENT:
 .PHONY: migration-up
-up:  # Makes up the migrations for MYSQL
-	migrate -path db/migrations -database $(mysql_connection) -verbose up
+migration-up:  # Makes up the migrations for MYSQL
+	migrate -path db/migrations -verbose -database $(mysql_connection) up
 
+# .SILENT:
 .PHONY: migration-down
-down:  # Makes down the migrations for MYSQL
-	migrate -path db/migrations -verbose -database $(mysql_connection) 
+migration-down:  # Makes down the migrations for MYSQL
+	migrate -path db/migrations -verbose -database $(mysql_connection) down
+
+.PHONY: sqlc
+sqlc:  # Generates SQLC vode
+	sqlc generate 
