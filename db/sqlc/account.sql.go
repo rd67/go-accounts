@@ -47,11 +47,16 @@ func (q *Queries) GetAccount(ctx context.Context) (Account, error) {
 }
 
 const listAccounts = `-- name: ListAccounts :many
-SELECT name, balance, currency, isdeleted, createdat, updatedat, id FROM accounts ORDER BY id
+SELECT name, balance, currency, isdeleted, createdat, updatedat, id FROM accounts ORDER BY id LIMIT ?, ?
 `
 
-func (q *Queries) ListAccounts(ctx context.Context) ([]Account, error) {
-	rows, err := q.db.QueryContext(ctx, listAccounts)
+type ListAccountsParams struct {
+	Offset int32 `json:"offset"`
+	Limit  int32 `json:"limit"`
+}
+
+func (q *Queries) ListAccounts(ctx context.Context, arg ListAccountsParams) ([]Account, error) {
+	rows, err := q.db.QueryContext(ctx, listAccounts, arg.Offset, arg.Limit)
 	if err != nil {
 		return nil, err
 	}

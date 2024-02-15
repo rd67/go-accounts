@@ -19,15 +19,14 @@ type Account struct {
 }
 
 type Entry struct {
-	AccountID       uint64    `json:"account_id"`
-	PreviousBalance float64   `json:"previous_balance"`
-	Amount          float64   `json:"amount"`
-	Currency        string    `json:"currency"`
-	ExchangeRate    float64   `json:"exchange_rate"`
-	Isdeleted       bool      `json:"isdeleted"`
-	Createdat       time.Time `json:"createdat"`
-	Updatedat       time.Time `json:"updatedat"`
-	ID              uint64    `json:"id"`
+	AccountID    uint64    `json:"account_id"`
+	Amount       float64   `json:"amount"`
+	Currency     string    `json:"currency"`
+	ExchangeRate float64   `json:"exchange_rate"`
+	Isdeleted    bool      `json:"isdeleted"`
+	Createdat    time.Time `json:"createdat"`
+	Updatedat    time.Time `json:"updatedat"`
+	ID           uint64    `json:"id"`
 }
 
 type Transfer struct {

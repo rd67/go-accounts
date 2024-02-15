@@ -58,7 +58,6 @@ DROP TABLE IF EXISTS `entries`;
 CREATE TABLE `entries` (
     `id` bigint UNSIGNED NOT NULL,
     `account_id` bigint UNSIGNED NOT NULL,
-    `previous_balance` float UNSIGNED ZEROFILL NOT NULL,
     `amount` float UNSIGNED ZEROFILL NOT NULL,
     `currency` varchar(3) NOT NULL DEFAULT 'INR',
     `exchange_rate` float NOT NULL DEFAULT '1',

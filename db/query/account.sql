@@ -2,7 +2,7 @@
 SELECT * FROM accounts WHERE id = $1 LIMIT 1;
 
 -- name: ListAccounts :many
-SELECT * FROM accounts ORDER BY id;
+SELECT * FROM accounts ORDER BY id LIMIT ?, ?;
 
 -- name: CreateAccount :execresult
 INSERT INTO accounts (name, balance, currency) VALUES ($1, $2, $3);
