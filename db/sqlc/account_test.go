@@ -12,7 +12,7 @@ import (
 
 var faker = fk.New()
 
-func createTestAccount(t *testing.T) Account {
+func createRandomAccount(t *testing.T) Account {
 	args := CreateAccountParams{
 		Name: faker.Person().Name(),
 		Balance: int64(faker.RandomNumber(5)),
@@ -35,11 +35,11 @@ func createTestAccount(t *testing.T) Account {
 }
 
 func TestCreateAccount(t *testing.T) {
-	createTestAccount(t)
+	createRandomAccount(t)
 }
 
 func TestGetAccount(t *testing.T) {
-	account1 := createTestAccount(t)
+	account1 := createRandomAccount(t)
 
 	account2, err := testQueries.GetAccount(context.Background(), account1.ID)
 
@@ -53,7 +53,7 @@ func TestGetAccount(t *testing.T) {
 }
 
 func TestDeleteAccount(t *testing.T) {
-	account1 := createTestAccount(t)
+	account1 := createRandomAccount(t)
 
 	account2, err := testQueries.DeleteAccount(context.Background(), account1.ID)
 
@@ -63,7 +63,7 @@ func TestDeleteAccount(t *testing.T) {
 }
 
 func TestUpdateAccount(t *testing.T) {
-	account1 := createTestAccount(t)
+	account1 := createRandomAccount(t)
 
 
 	args := UpdateAccountParams{
@@ -85,7 +85,7 @@ func TestUpdateAccount(t *testing.T) {
 func TestListAccounts(t *testing.T) {
 
 	for i := 0; i < 10; i++ {
-		createTestAccount(t)
+		createRandomAccount(t)
 	}
 
 	args := ListAccountsParams{

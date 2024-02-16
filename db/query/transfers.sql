@@ -22,6 +22,8 @@ UPDATE transfers
 WHERE id = $1
 RETURNING *;
 
--- name: DeleteTransfer :exec
-DELETE FROM transfers
-WHERE id = $1;
+-- name: DeleteTransfer :one
+UPDATE transfers
+  set "isDeleted" = true, "updatedAt" = now()
+WHERE id = $1
+RETURNING *;

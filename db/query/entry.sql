@@ -22,6 +22,8 @@ UPDATE entries
 WHERE id = $1
 RETURNING *;
 
--- name: DeleteEntry :exec
-DELETE FROM entries
-WHERE id = $1;
+-- name: DeleteEntry :one
+UPDATE entries
+  set "isDeleted" = true, "updatedAt" = now()
+WHERE id = $1
+RETURNING *;

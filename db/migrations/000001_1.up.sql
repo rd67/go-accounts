@@ -48,6 +48,7 @@ CREATE TABLE "public"."transfers" (
     "status" character(1) NOT NULL,
     "createdAt" timestamptz DEFAULT now() NOT NULL,
     "updatedAt" timestamp DEFAULT now() NOT NULL,
+    "isDeleted" boolean DEFAULT false NOT NULL,
     CONSTRAINT "transfers_pkey" PRIMARY KEY ("id")
 ) WITH (oids = false);
 
