@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	"github.com/joho/godotenv"
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/lib/pq"
 )
 
 var (
@@ -38,6 +38,7 @@ func init() {
 
 	DB_DRIVER = os.Getenv("DB_DRIVER")
 
+	// user:password@/dbname
 	DB_CONNECTION_STRING = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
@@ -45,8 +46,6 @@ func init() {
 		os.Getenv("DB_PORT"),
 		os.Getenv("DB_NAME"),
 	)
-
-	// user:password@/dbname
 
 }
 

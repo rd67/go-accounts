@@ -4,10 +4,11 @@ import (
 	"context"
 	"testing"
 	"github.com/stretchr/testify/require"
+	_ "github.com/jaswdr/faker/v2"
 )
 
 
-func Test_CreateAccount(t *testing.T) {
+func TestCreateAccount(t *testing.T) {
 	args := CreateAccountParams{
 		Name: "Test",
 		Balance: 100,
