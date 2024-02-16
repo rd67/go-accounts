@@ -54,12 +54,11 @@ func TestGetAccount(t *testing.T) {
 func TestDeleteAccount(t *testing.T) {
 	account1 := createTestAccount(t)
 
-	err := testQueries.DeleteAccount(context.Background(), account1.ID)
-	require.NoError(t, err)
+	account2, err := testQueries.DeleteAccount(context.Background(), account1.ID)
 
-	account2, err := testQueries.GetAccount(context.Background(), account1.ID)
-	require.Error(t, err)
-	require.Empty(t, account2)
+	require.NoError(t, err)
+	require.NotEmpty(t, account2)
+	require.Equal(t, account2.IsDeleted, true)
 }
 
 func TestUpdateAccount(t *testing.T) {

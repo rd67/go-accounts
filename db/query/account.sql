@@ -22,6 +22,8 @@ UPDATE accounts
 WHERE id = $1
 RETURNING *;
 
--- name: DeleteAccount :exec
-DELETE FROM accounts
-WHERE id = $1;
+-- name: DeleteAccount :one
+UPDATE accounts
+  set "isDeleted" = true, "updatedAt" = now()
+WHERE id = $1
+RETURNING *;
