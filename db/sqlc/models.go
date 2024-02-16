@@ -11,7 +11,7 @@ import (
 type Account struct {
 	ID        int64     `json:"id"`
 	Name      string    `json:"name"`
-	Balance   string    `json:"balance"`
+	Balance   int64     `json:"balance"`
 	Currency  string    `json:"currency"`
 	IsDeleted bool      `json:"isDeleted"`
 	CreatedAt time.Time `json:"createdAt"`
@@ -21,7 +21,7 @@ type Account struct {
 type Entry struct {
 	ID           int64     `json:"id"`
 	AccountID    int64     `json:"account_id"`
-	Amount       string    `json:"amount"`
+	Amount       int64     `json:"amount"`
 	Currency     string    `json:"currency"`
 	ExchangeRate int32     `json:"exchange_rate"`
 	IsDeleted    bool      `json:"isDeleted"`
@@ -33,7 +33,7 @@ type Transfer struct {
 	ID                int64     `json:"id"`
 	SenderAccountID   int64     `json:"sender_account_id"`
 	ReceiverAccountID int64     `json:"receiver_account_id"`
-	Amount            string    `json:"amount"`
+	Amount            int64     `json:"amount"`
 	Currency          string    `json:"currency"`
 	ExchangeRate      float64   `json:"exchange_rate"`
 	Status            string    `json:"status"`

@@ -20,7 +20,7 @@ RETURNING id, account_id, amount, currency, exchange_rate, "isDeleted", "created
 
 type CreateEntryParams struct {
 	AccountID    int64  `json:"account_id"`
-	Amount       string `json:"amount"`
+	Amount       int64  `json:"amount"`
 	Currency     string `json:"currency"`
 	ExchangeRate int32  `json:"exchange_rate"`
 }
@@ -131,7 +131,7 @@ RETURNING id, account_id, amount, currency, exchange_rate, "isDeleted", "created
 type UpdateEntryParams struct {
 	ID           int64  `json:"id"`
 	AccountID    int64  `json:"account_id"`
-	Amount       string `json:"amount"`
+	Amount       int64  `json:"amount"`
 	Currency     string `json:"currency"`
 	ExchangeRate int32  `json:"exchange_rate"`
 }

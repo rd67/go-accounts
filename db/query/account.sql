@@ -10,21 +10,15 @@ OFFSET $2;
 
 -- name: CreateAccount :one
 INSERT INTO accounts (
-  name, balance, currency
+  "name", "balance", "currency"
 ) VALUES (
   $1, $2, $3
 )
 RETURNING *;
 
--- name: UpdateAccountDetails :one
+-- name: UpdateAccount :one
 UPDATE accounts
-  set name = $2
-WHERE id = $1
-RETURNING *;
-
--- name: UpdateAccountBalance :one
-UPDATE accounts
-  set balance = balance + $2
+  set "balance" = $2, "updatedAt" = now()
 WHERE id = $1
 RETURNING *;
 

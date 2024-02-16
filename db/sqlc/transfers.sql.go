@@ -21,7 +21,7 @@ RETURNING id, sender_account_id, receiver_account_id, amount, currency, exchange
 type CreateTransferParams struct {
 	SenderAccountID   int64   `json:"sender_account_id"`
 	ReceiverAccountID int64   `json:"receiver_account_id"`
-	Amount            string  `json:"amount"`
+	Amount            int64   `json:"amount"`
 	Currency          string  `json:"currency"`
 	ExchangeRate      float64 `json:"exchange_rate"`
 	Status            string  `json:"status"`
@@ -139,7 +139,7 @@ type UpdateTransferParams struct {
 	ID                int64   `json:"id"`
 	SenderAccountID   int64   `json:"sender_account_id"`
 	ReceiverAccountID int64   `json:"receiver_account_id"`
-	Amount            string  `json:"amount"`
+	Amount            int64   `json:"amount"`
 	Currency          string  `json:"currency"`
 	ExchangeRate      float64 `json:"exchange_rate"`
 	Status            string  `json:"status"`

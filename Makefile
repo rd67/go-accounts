@@ -53,3 +53,7 @@ migration-down:  # Makes down the migrations for DB
 .PHONY: sqlc
 sqlc:  # Generates SQLC vode
 	sqlc generate 
+
+.PHONY: test
+test:  # Run Unit Tests
+	go test -v -cover ./...
