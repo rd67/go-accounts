@@ -9,34 +9,34 @@ import (
 )
 
 type Account struct {
+	ID        int64     `json:"id"`
 	Name      string    `json:"name"`
-	Balance   float64   `json:"balance"`
+	Balance   string    `json:"balance"`
 	Currency  string    `json:"currency"`
-	Isdeleted bool      `json:"isdeleted"`
-	Createdat time.Time `json:"createdat"`
-	Updatedat time.Time `json:"updatedat"`
-	ID        uint64    `json:"id"`
+	IsDeleted bool      `json:"isDeleted"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
 }
 
 type Entry struct {
-	AccountID    uint64    `json:"account_id"`
-	Amount       float64   `json:"amount"`
+	ID           int64     `json:"id"`
+	AccountID    int64     `json:"account_id"`
+	Amount       string    `json:"amount"`
 	Currency     string    `json:"currency"`
-	ExchangeRate float64   `json:"exchange_rate"`
-	Isdeleted    bool      `json:"isdeleted"`
-	Createdat    time.Time `json:"createdat"`
-	Updatedat    time.Time `json:"updatedat"`
-	ID           uint64    `json:"id"`
+	ExchangeRate int32     `json:"exchange_rate"`
+	IsDeleted    bool      `json:"isDeleted"`
+	CreatedAt    time.Time `json:"createdAt"`
+	UpdatedAt    time.Time `json:"updatedAt"`
 }
 
 type Transfer struct {
-	SenderAccountID   uint64    `json:"sender_account_id"`
-	ReceiverAccountID uint64    `json:"receiver_account_id"`
-	Amount            float64   `json:"amount"`
+	ID                int64     `json:"id"`
+	SenderAccountID   int64     `json:"sender_account_id"`
+	ReceiverAccountID int64     `json:"receiver_account_id"`
+	Amount            string    `json:"amount"`
 	Currency          string    `json:"currency"`
 	ExchangeRate      float64   `json:"exchange_rate"`
 	Status            string    `json:"status"`
-	Createdat         time.Time `json:"createdat"`
-	Updatedat         time.Time `json:"updatedat"`
-	ID                uint64    `json:"id"`
+	CreatedAt         time.Time `json:"createdAt"`
+	UpdatedAt         time.Time `json:"updatedAt"`
 }

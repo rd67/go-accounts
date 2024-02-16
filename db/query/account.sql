@@ -1,17 +1,33 @@
 -- name: GetAccount :one
-SELECT * FROM accounts WHERE id = ? LIMIT 1;
+SELECT * FROM accounts
+WHERE id = $1 LIMIT 1;
 
 -- name: ListAccounts :many
-SELECT * FROM accounts ORDER BY id LIMIT ?, ?;
+SELECT * FROM accounts
+ORDER BY id
+LIMIT $1
+OFFSET $2;
 
--- name: CreateAccount :execresult
-INSERT INTO accounts (name, balance, currency) VALUES (?, ?, ?);
+-- name: CreateAccount :one
+INSERT INTO accounts (
+  name, balance, currency
+) VALUES (
+  $1, $2, $3
+)
+RETURNING *;
+
+-- name: UpdateAccountDetails :one
+UPDATE accounts
+  set name = $2
+WHERE id = $1
+RETURNING *;
+
+-- name: UpdateAccountBalance :one
+UPDATE accounts
+  set balance = balance + $2
+WHERE id = $1
+RETURNING *;
 
 -- name: DeleteAccount :exec
-DELETE FROM accounts WHERE id = ?;
-
--- name: UpdateAccountDetails :execresult
-UPDATE accounts SET name = ? WHERE id = ?;
-
--- name: UpdateAccountBalance :execresult
-UPDATE accounts SET balance = balance + ? WHERE id = ?;
+DELETE FROM accounts
+WHERE id = $1;

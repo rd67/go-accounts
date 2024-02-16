@@ -6,26 +6,25 @@ package db
 
 import (
 	"context"
-	"database/sql"
 )
 
 type Querier interface {
-	CreateAccount(ctx context.Context, arg CreateAccountParams) (sql.Result, error)
-	CreateEntry(ctx context.Context, arg CreateEntryParams) (sql.Result, error)
-	CreateTransfer(ctx context.Context) (sql.Result, error)
-	DeleteAccount(ctx context.Context, id uint64) error
-	DeleteEntry(ctx context.Context, id uint64) error
-	DeleteTransfer(ctx context.Context) error
-	GetAccount(ctx context.Context, id uint64) (Account, error)
-	GetEntry(ctx context.Context, id uint64) (Entry, error)
-	GetTransfer(ctx context.Context) (Transfer, error)
+	CreateAccount(ctx context.Context, arg CreateAccountParams) (Account, error)
+	CreateEntry(ctx context.Context, arg CreateEntryParams) (Entry, error)
+	CreateTransfer(ctx context.Context, arg CreateTransferParams) (Transfer, error)
+	DeleteAccount(ctx context.Context, id int64) error
+	DeleteEntry(ctx context.Context, id int64) error
+	DeleteTransfer(ctx context.Context, id int64) error
+	GetAccount(ctx context.Context, id int64) (Account, error)
+	GetEntry(ctx context.Context, id int64) (Entry, error)
+	GetTransfer(ctx context.Context, id int64) (Transfer, error)
 	ListAccounts(ctx context.Context, arg ListAccountsParams) ([]Account, error)
 	ListEntries(ctx context.Context, arg ListEntriesParams) ([]Entry, error)
 	ListTransfers(ctx context.Context, arg ListTransfersParams) ([]Transfer, error)
-	UpdateAccountBalance(ctx context.Context, arg UpdateAccountBalanceParams) (sql.Result, error)
-	UpdateAccountDetails(ctx context.Context, arg UpdateAccountDetailsParams) (sql.Result, error)
-	UpdateEntry(ctx context.Context, arg UpdateEntryParams) (sql.Result, error)
-	UpdateTransfer(ctx context.Context) (sql.Result, error)
+	UpdateAccountBalance(ctx context.Context, arg UpdateAccountBalanceParams) (Account, error)
+	UpdateAccountDetails(ctx context.Context, arg UpdateAccountDetailsParams) (Account, error)
+	UpdateEntry(ctx context.Context, arg UpdateEntryParams) (Entry, error)
+	UpdateTransfer(ctx context.Context, arg UpdateTransferParams) (Transfer, error)
 }
 
 var _ Querier = (*Queries)(nil)
