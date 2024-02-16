@@ -5,9 +5,10 @@ ifneq (,$(wildcard ./.env))
     export
 endif
 
-# MySQL Connection string generated via environment variables from .env file.
-mysql_connection = "mysql://$(MYSQL_USER):$(MYSQL_PASSWORD)@tcp($(MYSQL_HOST):${MYSQL_PORT})/$(MYSQL_DATABASE)"
+# DB Connection string generated via environment variables from .env file.
+db_connection = "${DB_DRIVER}://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):${DB_PORT}/$(DB_NAME)?sslmode=disable"
 
+# postgres://localhost:5432/database
 
 default: help
 
@@ -41,14 +42,18 @@ docker-compose-stop: # Temporary stops docker-compose
 
 # .SILENT:
 .PHONY: migration-up
-migration-up:  # Makes up the migrations for MYSQL
-	migrate -path db/migrations -verbose -database $(mysql_connection) up
+migration-up:  # Makes up the migrations for DB
+	migrate -path db/migrations -verbose -database $(db_connection) up
 
 # .SILENT:
 .PHONY: migration-down
-migration-down:  # Makes down the migrations for MYSQL
-	migrate -path db/migrations -verbose -database $(mysql_connection) down
+migration-down:  # Makes down the migrations for DB
+	migrate -path db/migrations -verbose -database $(db_connection) down
 
 .PHONY: sqlc
 sqlc:  # Generates SQLC vode
 	sqlc generate 
+
+.PHONY: test
+test:  # Run Unit Tests
+	go test -v -cover ./...
