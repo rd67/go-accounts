@@ -1,7 +1,5 @@
 -- Adminer 4.8.1 PostgreSQL 12.18 (Debian 12.18-1.pgdg120+2) dump
 
-\connect "go_accounts";
-
 DROP TABLE IF EXISTS "accounts";
 DROP SEQUENCE IF EXISTS accounts_id_seq;
 CREATE SEQUENCE accounts_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1;

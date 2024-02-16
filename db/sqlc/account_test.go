@@ -3,20 +3,26 @@ package db
 import (
 	"context"
 	"testing"
+
+	"github.com/jaswdr/faker/v2"
 	"github.com/stretchr/testify/require"
-	_ "github.com/jaswdr/faker/v2"
 )
 
 
 func TestCreateAccount(t *testing.T) {
+
+	faker := faker.New()
+
 	args := CreateAccountParams{
-		Name: "Test",
-		Balance: 100,
-		Currency: "USD",
+		Name: faker.Person().Name(),
+		Balance: float64(faker.Currency().Number()),
+		Currency: faker.Currency().Currency(),
 	}
 
 	account, err := testQueries.CreateAccount(context.Background(), args)
 
 	require.NoError(t, err)
 	require.NotEmpty(t, account)
+
+	require.Equal(t, account.)
 }

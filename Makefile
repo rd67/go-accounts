@@ -6,8 +6,9 @@ ifneq (,$(wildcard ./.env))
 endif
 
 # DB Connection string generated via environment variables from .env file.
-db_connection = "${DB_DRIVER}://$(DB_USER):$(DB_PASSWORD)@tcp($(DB_HOST):${DB_PORT})/$(DB_NAME)"
+db_connection = "${DB_DRIVER}://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):${DB_PORT}/$(DB_NAME)?sslmode=disable"
 
+# postgres://localhost:5432/database
 
 default: help
 

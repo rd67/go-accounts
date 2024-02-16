@@ -22,7 +22,7 @@ func init() {
 	DB_DRIVER = os.Getenv("DB_DRIVER")
 
 	//	"${DB_DRIVER}://$(DB_USER):$(DB_PASSWORD)@tcp($(DB_HOST):${DB_PORT})/$(DB_NAME)"
-	DB_CONNECTION_STRING = fmt.Sprintf("%s://%s:%s@tcp(%s:%s)/%s",
+	DB_CONNECTION_STRING = fmt.Sprintf("%s://%s:%s@%s:%s/%s?sslmode=disable",
 		os.Getenv("DB_DRIVER"),
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
