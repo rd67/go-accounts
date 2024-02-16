@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"strings"
 	"testing"
 	"time"
 
@@ -15,7 +16,7 @@ func createTestAccount(t *testing.T) Account {
 	args := CreateAccountParams{
 		Name: faker.Person().Name(),
 		Balance: int64(faker.RandomNumber(5)),
-		Currency: faker.Currency().Code(),
+		Currency: strings.Trim(faker.Currency().Code(), " "),
 	}
 
 	account, err := testQueries.CreateAccount(context.Background(), args)
@@ -23,9 +24,9 @@ func createTestAccount(t *testing.T) Account {
 	require.NoError(t, err)
 	require.NotEmpty(t, account)
 
-	require.Equal(t, account.Name, args.Name)
-	require.Equal(t, account.Balance, args.Balance)
-	require.Equal(t, account.Currency, args.Currency)
+	require.Equal(t, args.Name, account.Name)
+	require.Equal(t, args.Balance, account.Balance)
+	require.Equal(t, args.Currency, account.Currency)
 
 	require.NotEqual(t, 0, account.ID)
 	require.NotNil(t, account.CreatedAt)
@@ -78,5 +79,28 @@ func TestUpdateAccount(t *testing.T) {
 	require.Equal(t, account1.Currency, account2.Currency)
 	require.WithinDuration(t, account1.UpdatedAt, account2.UpdatedAt, time.Second)
 
-	require.Equal(t, account2.Balance, args.Balance)
+	require.Equal(t, args.Balance, account2.Balance)
+}
+
+func TestListAccounts(t *testing.T) {
+
+	for i := 0; i < 10; i++ {
+		createTestAccount(t)
+	}
+
+	args := ListAccountsParams{
+		Limit: 5,
+		Offset: 5,
+	}
+
+	accounts, err := testQueries.ListAccounts(context.Background(), args)
+
+	require.NoError(t, err)
+	require.Len(t, accounts, 5)
+
+	for _, account :=  range accounts {
+		require.NotEmpty(t, account)
+		require.NotZero(t, account.ID)
+	}
+
 }
