@@ -1,10 +1,15 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
+	"github.com/rd67/go-accounts/api"
+	db "github.com/rd67/go-accounts/db/sqlc"
 )
 
 var (
@@ -36,4 +41,18 @@ func init() {
 func main() {
 	// Print variables
 	fmt.Println("env variables loaded....")
+
+	conn, err := sql.Open(DB_DRIVER, DB_CONNECTION_STRING)
+	if err != nil {
+		log.Fatal("Cannot connect to DB: ", err)
+	}
+
+	store := db.NewStore(conn)
+
+	server := api.NewServer(store)
+
+	err = server.Start(":"+os.Getenv("SERVER_PORT"))
+	if err != nil {
+		log.Fatal("Error running server", err)
+	}
 }
