@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"strings"
 	"testing"
 	"time"
 
@@ -16,7 +15,7 @@ func createRandomAccount(t *testing.T) Account {
 	args := CreateAccountParams{
 		Name: faker.Person().Name(),
 		Balance: int64(faker.RandomNumber(5)),
-		Currency: strings.Trim(faker.Currency().Code(), " "),
+		Currency: "INR",
 	}
 
 	account, err := testQueries.CreateAccount(context.Background(), args)
