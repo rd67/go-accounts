@@ -12,6 +12,7 @@ var (
 	CREATED_REQUEST_STATUS_CODE = http.StatusCreated
 	SUCCESS_REQUEST_STATUS_CODE = http.StatusOK
 	ERROR_REQUEST_STATUS_CODE = http.StatusInternalServerError
+	NOT_FOUND_REQUEST_STATUS_CODE = http.StatusNotFound
 )
 
 type ResponseCommonParameters struct {
@@ -40,5 +41,13 @@ func SuccessResponse(data any) gin.H {
 		"status_code": SUCCESS_REQUEST_STATUS_CODE,
 		"message": "Success",
 		"data": data,
+	}
+}
+
+func NotFoundErrorResponseH(err error) gin.H {
+	return gin.H{
+		"status_code": NOT_FOUND_REQUEST_STATUS_CODE,
+		"message": "Record not found",
+		"error": err.Error(),
 	}
 }
