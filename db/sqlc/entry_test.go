@@ -5,8 +5,6 @@ import (
 	"testing"
 	"time"
 
-	"strings"
-
 	"github.com/stretchr/testify/require"
 )
 
@@ -17,7 +15,7 @@ func createRandomEntry(t *testing.T) Entry {
 	args := CreateEntryParams{
 		AccountID:    account.ID,
 		Amount:       int64(faker.RandomNumber(5)),
-		Currency:     strings.Trim(faker.Currency().Code(), " "),
+		Currency:     "INR",
 		ExchangeRate: 1,
 	}
 

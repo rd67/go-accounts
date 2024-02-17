@@ -34,9 +34,6 @@ type Transfer struct {
 	SenderAccountID   int64     `json:"sender_account_id"`
 	ReceiverAccountID int64     `json:"receiver_account_id"`
 	Amount            int64     `json:"amount"`
-	Currency          string    `json:"currency"`
-	ExchangeRate      float64   `json:"exchange_rate"`
-	Status            string    `json:"status"`
 	CreatedAt         time.Time `json:"createdAt"`
 	UpdatedAt         time.Time `json:"updatedAt"`
 	IsDeleted         bool      `json:"isDeleted"`

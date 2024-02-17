@@ -11,40 +11,27 @@ import (
 
 const createTransfer = `-- name: CreateTransfer :one
 INSERT INTO transfers (
-  sender_account_id, receiver_account_id, amount, currency, exchange_rate, status
+  sender_account_id, receiver_account_id, amount
 ) VALUES (
-  $1, $2, $3, $4, $5, $6
+  $1, $2, $3
 )
-RETURNING id, sender_account_id, receiver_account_id, amount, currency, exchange_rate, status, "createdAt", "updatedAt", "isDeleted"
+RETURNING id, sender_account_id, receiver_account_id, amount, "createdAt", "updatedAt", "isDeleted"
 `
 
 type CreateTransferParams struct {
-	SenderAccountID   int64   `json:"sender_account_id"`
-	ReceiverAccountID int64   `json:"receiver_account_id"`
-	Amount            int64   `json:"amount"`
-	Currency          string  `json:"currency"`
-	ExchangeRate      float64 `json:"exchange_rate"`
-	Status            string  `json:"status"`
+	SenderAccountID   int64 `json:"sender_account_id"`
+	ReceiverAccountID int64 `json:"receiver_account_id"`
+	Amount            int64 `json:"amount"`
 }
 
 func (q *Queries) CreateTransfer(ctx context.Context, arg CreateTransferParams) (Transfer, error) {
-	row := q.db.QueryRowContext(ctx, createTransfer,
-		arg.SenderAccountID,
-		arg.ReceiverAccountID,
-		arg.Amount,
-		arg.Currency,
-		arg.ExchangeRate,
-		arg.Status,
-	)
+	row := q.db.QueryRowContext(ctx, createTransfer, arg.SenderAccountID, arg.ReceiverAccountID, arg.Amount)
 	var i Transfer
 	err := row.Scan(
 		&i.ID,
 		&i.SenderAccountID,
 		&i.ReceiverAccountID,
 		&i.Amount,
-		&i.Currency,
-		&i.ExchangeRate,
-		&i.Status,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.IsDeleted,
@@ -56,7 +43,7 @@ const deleteTransfer = `-- name: DeleteTransfer :one
 UPDATE transfers
   set "isDeleted" = true, "updatedAt" = now()
 WHERE id = $1
-RETURNING id, sender_account_id, receiver_account_id, amount, currency, exchange_rate, status, "createdAt", "updatedAt", "isDeleted"
+RETURNING id, sender_account_id, receiver_account_id, amount, "createdAt", "updatedAt", "isDeleted"
 `
 
 func (q *Queries) DeleteTransfer(ctx context.Context, id int64) (Transfer, error) {
@@ -67,9 +54,6 @@ func (q *Queries) DeleteTransfer(ctx context.Context, id int64) (Transfer, error
 		&i.SenderAccountID,
 		&i.ReceiverAccountID,
 		&i.Amount,
-		&i.Currency,
-		&i.ExchangeRate,
-		&i.Status,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.IsDeleted,
@@ -78,7 +62,7 @@ func (q *Queries) DeleteTransfer(ctx context.Context, id int64) (Transfer, error
 }
 
 const getTransfer = `-- name: GetTransfer :one
-SELECT id, sender_account_id, receiver_account_id, amount, currency, exchange_rate, status, "createdAt", "updatedAt", "isDeleted" FROM transfers
+SELECT id, sender_account_id, receiver_account_id, amount, "createdAt", "updatedAt", "isDeleted" FROM transfers
 WHERE id = $1 LIMIT 1
 `
 
@@ -90,9 +74,6 @@ func (q *Queries) GetTransfer(ctx context.Context, id int64) (Transfer, error) {
 		&i.SenderAccountID,
 		&i.ReceiverAccountID,
 		&i.Amount,
-		&i.Currency,
-		&i.ExchangeRate,
-		&i.Status,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.IsDeleted,
@@ -101,7 +82,7 @@ func (q *Queries) GetTransfer(ctx context.Context, id int64) (Transfer, error) {
 }
 
 const listTransfers = `-- name: ListTransfers :many
-SELECT id, sender_account_id, receiver_account_id, amount, currency, exchange_rate, status, "createdAt", "updatedAt", "isDeleted" FROM transfers
+SELECT id, sender_account_id, receiver_account_id, amount, "createdAt", "updatedAt", "isDeleted" FROM transfers
 ORDER BY id
 LIMIT $1
 OFFSET $2
@@ -126,9 +107,6 @@ func (q *Queries) ListTransfers(ctx context.Context, arg ListTransfersParams) ([
 			&i.SenderAccountID,
 			&i.ReceiverAccountID,
 			&i.Amount,
-			&i.Currency,
-			&i.ExchangeRate,
-			&i.Status,
 			&i.CreatedAt,
 			&i.UpdatedAt,
 			&i.IsDeleted,
@@ -148,19 +126,16 @@ func (q *Queries) ListTransfers(ctx context.Context, arg ListTransfersParams) ([
 
 const updateTransfer = `-- name: UpdateTransfer :one
 UPDATE transfers
-  set sender_account_id = $2, receiver_account_id= $3, amount = $4, currency = $5, exchange_rate = $6, status = $7
+  set sender_account_id = $2, receiver_account_id= $3, amount = $4
 WHERE id = $1
-RETURNING id, sender_account_id, receiver_account_id, amount, currency, exchange_rate, status, "createdAt", "updatedAt", "isDeleted"
+RETURNING id, sender_account_id, receiver_account_id, amount, "createdAt", "updatedAt", "isDeleted"
 `
 
 type UpdateTransferParams struct {
-	ID                int64   `json:"id"`
-	SenderAccountID   int64   `json:"sender_account_id"`
-	ReceiverAccountID int64   `json:"receiver_account_id"`
-	Amount            int64   `json:"amount"`
-	Currency          string  `json:"currency"`
-	ExchangeRate      float64 `json:"exchange_rate"`
-	Status            string  `json:"status"`
+	ID                int64 `json:"id"`
+	SenderAccountID   int64 `json:"sender_account_id"`
+	ReceiverAccountID int64 `json:"receiver_account_id"`
+	Amount            int64 `json:"amount"`
 }
 
 func (q *Queries) UpdateTransfer(ctx context.Context, arg UpdateTransferParams) (Transfer, error) {
@@ -169,9 +144,6 @@ func (q *Queries) UpdateTransfer(ctx context.Context, arg UpdateTransferParams) 
 		arg.SenderAccountID,
 		arg.ReceiverAccountID,
 		arg.Amount,
-		arg.Currency,
-		arg.ExchangeRate,
-		arg.Status,
 	)
 	var i Transfer
 	err := row.Scan(
@@ -179,9 +151,6 @@ func (q *Queries) UpdateTransfer(ctx context.Context, arg UpdateTransferParams) 
 		&i.SenderAccountID,
 		&i.ReceiverAccountID,
 		&i.Amount,
-		&i.Currency,
-		&i.ExchangeRate,
-		&i.Status,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 		&i.IsDeleted,
