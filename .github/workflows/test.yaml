@@ -44,11 +44,24 @@ jobs:
 
     - uses: actions/checkout@v3
 
-    - name: Instal go-migrate
+    - name: Install go-migrate
       run: |
         curl -L https://github.com/golang-migrate/migrate/releases/download/v4.17.0/migrate.linux-amd64.tar.gz | tar xvz
         sudo mv migrate /usr/bin/
         which migrate
+
+    - name: 'Create env file'
+      run: |
+        touch .env
+
+        echo DB_DRIVER=${{ vars.DB_DRIVER }} >> .env
+        echo DB_HOST=${{ vars.DB_HOST }} >> .env
+        echo DB_PORT=${{ vars.DB_PORT }} >> .env
+        echo DB_USER=${{ vars.DB_USER }} >> .env
+        echo DB_NAME=${{ vars.DB_NAME }} >> .env
+        echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
+
+        cat .env
 
     - name: Test
       run: make test
