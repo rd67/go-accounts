@@ -9,7 +9,7 @@ services:
       - go-accounts-postgres-data:/var/lib/postgresql/data
     restart: always
     ports:
-      - "5432:5432"
+      - "${DB_PORT}:5432"
     env_file:
       - .env
     environment:
