@@ -111,23 +111,23 @@ func (server *Server) getAccount(context *gin.Context) {
 /*
 Account get details function
 */
-type listAccountsRequest struct {
+type listAccountRequest struct {
 	PageId int64 `form:"page_id" binding:"required,min=1"`
 	Limit   int64 `form:"limit" binding:"required,min=10,max=100"`
 }
 
-type listAccountsResponseData struct {
+type listAccountResponseData struct {
 	Count    int64        `json:"count"`
 	Accounts []db.Account `json:"accounts"`
 }
-type listAccountsResponse struct {
+type listAccountResponse struct {
 	utils.ResponseCommonParameters
-	Data listAccountsResponseData `json:"data"`
+	Data listAccountResponseData `json:"data"`
 }
 
-func (server *Server) listAccounts(context *gin.Context) {
+func (server *Server) listAccount(context *gin.Context) {
 
-	var data listAccountsRequest
+	var data listAccountRequest
 
 	if err := context.ShouldBindQuery(&data); err != nil {
 		context.JSON(utils.BAD_REQUEST_STATUS_CODE, utils.ValidationErrorResponseH(err))
@@ -153,8 +153,8 @@ func (server *Server) listAccounts(context *gin.Context) {
 	}
 
 	// Creating response
-	response := listAccountsResponse{
-		Data: listAccountsResponseData{
+	response := listAccountResponse{
+		Data: listAccountResponseData{
 			Accounts: records,
 			Count:    count,
 		},
