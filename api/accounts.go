@@ -112,7 +112,7 @@ func (server *Server) getAccount(context *gin.Context) {
 Account get details function
 */
 type listAccountsRequest struct {
-	Page_Id int64 `form:"page_id" binding:"required,min=1"`
+	PageId int64 `form:"page_id" binding:"required,min=1"`
 	Limit   int64 `form:"limit" binding:"required,min=10,max=100"`
 }
 
@@ -137,7 +137,7 @@ func (server *Server) listAccounts(context *gin.Context) {
 	// Accounts listings
 	args := db.ListAccountsParams{
 		Limit:  int32(data.Limit),
-		Offset: int32((data.Page_Id - 1) * data.Limit),
+		Offset: int32((data.PageId - 1) * data.Limit),
 	}
 	records, err := server.store.ListAccounts(context, args)
 	if err != nil {
