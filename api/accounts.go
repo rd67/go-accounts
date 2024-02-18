@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	utils "github.com/rd67/go-accounts/api/utils"
+	utils "github.com/rd67/go-accounts/utils"
 	db "github.com/rd67/go-accounts/db/sqlc"
 )
 
