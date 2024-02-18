@@ -1,14 +1,9 @@
 
 # Reading env file for environment variables
-ifneq (,$(wildcard ./.env))
-    include .env
+ifneq (,$(wildcard ./app.env))
+    include app.env
     export
 endif
-
-# DB Connection string generated via environment variables from .env file.
-db_connection = "${DB_DRIVER}://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):${DB_PORT}/$(DB_NAME)?sslmode=disable"
-
-# postgres://localhost:5432/database
 
 default: help
 
@@ -43,12 +38,12 @@ docker-compose-stop: # Temporary stops docker-compose
 # .SILENT:
 .PHONY: migration-up
 migration-up:  # Makes up the migrations for DB
-	migrate -path db/migrations -verbose -database $(db_connection) up
+	migrate -path db/migrations -database "$(DB_SOURCE)" -verbose up
 
 # .SILENT:
 .PHONY: migration-down
 migration-down:  # Makes down the migrations for DB
-	migrate -path db/migrations -verbose -database $(db_connection) down
+	migrate -path db/migrations -database "$(DB_SOURCE)" -verbose down
 
 .PHONY: sqlc
 sqlc:  # Generates SQLC vode

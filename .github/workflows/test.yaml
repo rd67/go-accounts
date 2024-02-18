@@ -51,16 +51,12 @@ jobs:
 
     - name: 'Create env file'
       run: |
-        touch .env
+        touch app.env
 
-        echo DB_DRIVER=${{ vars.DB_DRIVER }} >> .env
-        echo DB_HOST=${{ vars.DB_HOST }} >> .env
-        echo DB_PORT=${{ vars.DB_PORT }} >> .env
-        echo DB_USER=${{ vars.DB_USER }} >> .env
-        echo DB_NAME=${{ vars.DB_NAME }} >> .env
-        echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
+        echo DB_DRIVER=${{ vars.DB_DRIVER }} >> app.env
+        echo DB_SOURCE=${{ secrets.DB_SOURCE }} >> app.env
 
-        cat .env
+        cat app.env
 
     - name: Run Migrations
       run: make migration-up
