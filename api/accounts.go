@@ -47,22 +47,23 @@ func (server *Server) createAccount(context *gin.Context) {
 		return
 	}
 
-	result := createAccountResponse{
+	// Creating response
+	response := createAccountResponse{
 		Data: createAccountResponseData{
 			Account: account,
 		},
 	}
-	result.Message = "Account created successfully"
-	result.Status_Code = utils.CREATED_REQUEST_STATUS_CODE
+	response.Message = "Account created successfully"
+	response.Status_Code = utils.CREATED_REQUEST_STATUS_CODE
 
-	context.JSON(utils.CREATED_REQUEST_STATUS_CODE, result)
+	context.JSON(response.Status_Code, response)
 }
 
 /*
 Account get details function
 */
 type getAccountRequest struct {
-	Id int64 `uri:"id" binding:"required"`
+	Id int64 `uri:"id" binding:"required,min=1"`
 }
 
 type getAccountResponseData struct {
@@ -94,14 +95,72 @@ func (server *Server) getAccount(context *gin.Context) {
 		return
 	}
 
-	result := getAccountResponse{
+	// Creating response
+	response := getAccountResponse{
 		Data: getAccountResponseData{
 			Account: account,
 		},
 	}
-	result.Message = "Account details"
-	result.Status_Code = utils.CREATED_REQUEST_STATUS_CODE
+	response.Message = "Account details"
+	response.Status_Code = utils.CREATED_REQUEST_STATUS_CODE
 
-	context.JSON(utils.SUCCESS_REQUEST_STATUS_CODE, result)
+	context.JSON(response.Status_Code, response)
 
+}
+
+/*
+Account get details function
+*/
+type listAccountsRequest struct {
+	Page_Id int64 `form:"page_id" binding:"required,min=1"`
+	Limit   int64 `form:"limit" binding:"required,min=10,max=100"`
+}
+
+type listAccountsResponseData struct {
+	Count    int64        `json:"count"`
+	Accounts []db.Account `json:"accounts"`
+}
+type listAccountsResponse struct {
+	utils.ResponseCommonParameters
+	Data listAccountsResponseData `json:"data"`
+}
+
+func (server *Server) listAccounts(context *gin.Context) {
+
+	var data listAccountsRequest
+
+	if err := context.ShouldBindQuery(&data); err != nil {
+		context.JSON(utils.BAD_REQUEST_STATUS_CODE, utils.ValidationErrorResponseH(err))
+		return
+	}
+
+	// Accounts listings
+	args := db.ListAccountsParams{
+		Limit:  int32(data.Limit),
+		Offset: int32((data.Page_Id - 1) * data.Limit),
+	}
+	records, err := server.store.ListAccounts(context, args)
+	if err != nil {
+		context.JSON(utils.ERROR_REQUEST_STATUS_CODE, utils.ErrorResponseH(err))
+		return
+	}
+
+	//	Accounts countings
+	count, err := server.store.CountAccounts(context)
+	if err != nil {
+		context.JSON(utils.ERROR_REQUEST_STATUS_CODE, utils.ErrorResponseH(err))
+		return
+	}
+
+	// Creating response
+	response := listAccountsResponse{
+		Data: listAccountsResponseData{
+			Accounts: records,
+			Count:    count,
+		},
+	}
+	response.Status_Code = utils.SUCCESS_REQUEST_STATUS_CODE
+	response.Message = "Listing"
+
+	context.JSON(response.Status_Code, response)
 }
