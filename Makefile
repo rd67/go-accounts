@@ -57,3 +57,7 @@ sqlc:  # Generates SQLC vode
 .PHONY: test
 test:  # Run Unit Tests
 	go test -v -cover ./...
+
+.PHONY: start-dev
+start-dev:  # Run the Gin Dev Server
+	go run main.go

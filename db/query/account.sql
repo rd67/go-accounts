@@ -8,6 +8,9 @@ ORDER BY id
 LIMIT $1
 OFFSET $2;
 
+-- name: CountAccounts :one
+SELECT COUNT(*) FROM accounts;
+
 -- name: CreateAccount :one
 INSERT INTO accounts (
   "name", "balance", "currency"
