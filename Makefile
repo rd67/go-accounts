@@ -11,6 +11,13 @@ default: help
 help: # Show help for each of the Makefile recipes.
 	@grep -E '^[a-zA-Z0-9 -]+:.*#'  Makefile | sort | while read -r l; do printf "\033[1;32m$$(echo $$l | cut -f 1 -d':')\033[00m:$$(echo $$l | cut -f 2- -d'#')\n"; done
 
+network:
+	docker network create accounts_network
+
+.PHONY: 
+postgres: # Create postgres docker container
+	docker run --name accounts-postgres --network accounts_network -p 5432:5432 -e POSTGRES_USER=accountUser -e POSTGRES_PASSWORD=accountPassword POSTGRES_DB=accounts -d postgres:14-alpine
+
 .PHONY: docker-compose-build
 docker-compose-build: # Create docker-compose build
 	docker-compose -f docker-compose.yml build $(c)

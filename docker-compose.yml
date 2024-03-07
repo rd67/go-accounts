@@ -3,7 +3,7 @@ version: "3.8"
 services:
   # Database
   postgres:
-    image: postgres:12
+    image: postgres:14-alpine
     container_name: accounts-postgres
     volumes:
       - postgres-data:/var/lib/postgresql/data
@@ -17,6 +17,11 @@ services:
       POSTGRES_PASSWORD: "accountPassword"
       POSTGRES_DB: "accounts"
       PGDATA: /var/lib/postgresql/data/pgdata
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   # phppgadmin
   phppgadmin:
@@ -44,6 +49,23 @@ services:
       ADMINER_DEFAULT_SERVER: postgres
     depends_on:
       - postgres
+
+  go-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: go-api
+    restart: always
+    ports:
+      - 3000:3000
+    env_file:
+      - app.env
+    # environment:
+    #   - DB_SOURCE="postgres://accountUser:accountPassword@accounts-postgres:5432/accounts?sslmode=disable"
+    depends_on:
+      postgres:
+        condition: service_healthy
+        restart: true
 
 volumes:
   postgres-data:
