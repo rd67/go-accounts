@@ -6,7 +6,7 @@ import (
 
 type Config struct {
 	ENVIRONMENT string `mapstructure:"APP_ENV"`
-	PORT    string `mapstructure:"PORT"`
+	HTTP_SERVER_ADDRESS    string `mapstructure:"HTTP_SERVER_ADDRESS"`
 
 	DB_DRIVER   string `mapstructure:"DB_DRIVER"`
 	DB_SOURCE   string `mapstructure:"DB_SOURCE"`
