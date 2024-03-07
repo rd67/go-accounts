@@ -35,12 +35,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Generate app.env file from AWS Secret Manager
-        run: ./generate_env.sh
-
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@62f4f872db3836360b72999f4b87f1ff13310f3a
+
+      - name: Generate app.env file from AWS Secret Manager
+        run: ./generate_env.sh
 
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
