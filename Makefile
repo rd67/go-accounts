@@ -1,20 +1,22 @@
 
 # Reading env file for environment variables
-ifneq (,$(wildcard ./.env))
-    include .env
+ifneq (,$(wildcard ./app.env))
+    include app.env
     export
 endif
-
-# DB Connection string generated via environment variables from .env file.
-db_connection = "${DB_DRIVER}://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):${DB_PORT}/$(DB_NAME)?sslmode=disable"
-
-# postgres://localhost:5432/database
 
 default: help
 
 .PHONY: help
 help: # Show help for each of the Makefile recipes.
 	@grep -E '^[a-zA-Z0-9 -]+:.*#'  Makefile | sort | while read -r l; do printf "\033[1;32m$$(echo $$l | cut -f 1 -d':')\033[00m:$$(echo $$l | cut -f 2- -d'#')\n"; done
+
+network:
+	docker network create accounts_network
+
+.PHONY: 
+postgres: # Create postgres docker container
+	docker run --name accounts-postgres --network accounts_network -p 5432:5432 -e POSTGRES_USER=accountUser -e POSTGRES_PASSWORD=accountPassword POSTGRES_DB=accounts -d postgres:14-alpine
 
 .PHONY: docker-compose-build
 docker-compose-build: # Create docker-compose build
@@ -43,12 +45,12 @@ docker-compose-stop: # Temporary stops docker-compose
 # .SILENT:
 .PHONY: migration-up
 migration-up:  # Makes up the migrations for DB
-	migrate -path db/migrations -verbose -database $(db_connection) up
+	migrate -path db/migrations -database "$(DB_SOURCE)" -verbose up
 
 # .SILENT:
 .PHONY: migration-down
 migration-down:  # Makes down the migrations for DB
-	migrate -path db/migrations -verbose -database $(db_connection) down
+	migrate -path db/migrations -database "$(DB_SOURCE)" -verbose down
 
 .PHONY: sqlc
 sqlc:  # Generates SQLC vode
