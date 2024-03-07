@@ -29,7 +29,7 @@ func main() {
 
 	server := api.NewServer(store)
 
-	err = server.Start(":" + config.PORT)
+	err = server.Start(":" + config.HTTP_SERVER_ADDRESS)
 	if err != nil {
 		log.Fatal("Error running server", err)
 	}
