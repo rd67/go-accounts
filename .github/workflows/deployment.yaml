@@ -42,8 +42,8 @@ jobs:
 
       # - name: Generate app.env file from AWS Secret Manager
       #   run: ./generate_env.sh
-      - name: Load secrets and save to app.env
-        run: aws secretsmanager get-secret-value --secret-id $SECRET_MANAGER_ID --query SecretString --output text | jq -r 'to_entries|map("\(.key)=\(.value)")|.[]' > app.env
+      - name: Load secrets from AWS Secret Manager and save to app.env
+        run: aws secretsmanager get-secret-value --secret-id go-accounts --query SecretString --output text | jq -r 'to_entries|map("\(.key)=\(.value)")|.[]' > app.env
 
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
