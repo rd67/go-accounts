@@ -6,7 +6,6 @@ set -e
 # Reading env file for environment variables
 source /app/app.env
 
-
 echo "Running Migrations"
 /app/migrate -path /app/db/migrations -database "$DB_SOURCE" -verbose up
 # make migration-up
