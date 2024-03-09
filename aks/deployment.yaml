@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-accounts-api
+  labels:
+    app: go-accounts
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-accounts
+  template:
+    metadata:
+      labels:
+        app: go-accounts
+    spec:
+      containers:
+      - name: go-accounts-api
+        image: 590184084151.dkr.ecr.ap-south-1.amazonaws.com/go-accounts:9b985803b5a3dda22a540ad1d4ee208ac2e06053
+        ports:
+        - containerPort: 3000
