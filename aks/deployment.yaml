@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: go-accounts-api
-        image: 590184084151.dkr.ecr.ap-south-1.amazonaws.com/go-accounts:9b985803b5a3dda22a540ad1d4ee208ac2e06053
+        image: 590184084151.dkr.ecr.ap-south-1.amazonaws.com/go-accounts:5a459eccbc9b643dd9caec32697bde7322ad362d
         ports:
         - containerPort: 3000
